@@ -1,12 +1,22 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using DapperAddons.Helpers.Contracts;
+using DapperAddons.Helpers.Implementations;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DapperAddons;
+/// <summary>
+/// Dapper Addons services container to register services in your main application
+/// </summary>
 public static class DapperAddonServices
 {
-    public static IServiceCollection AddDapperAddon(this IServiceCollection services)
+    /// <summary>
+    /// DapperAddons method that will help you inject AddDapperAddons services into your dependency injection container.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddDapperAddons(this IServiceCollection services)
     {
-        services.TryAddScoped<IDbHelpers, DbHelpers>();
-        return services.AddDapperAddon();
+        services.AddScoped(typeof(IDbHelpers), typeof(DbHelpers));
+        services.AddScoped(typeof(IHTMLHelpers), typeof(HTMLHelpers));
+        return services;
     }
 }

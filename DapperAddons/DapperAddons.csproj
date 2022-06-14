@@ -1,35 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Authors>Ahsan Joiya</Authors>
-    <Description>Dapper Addons is a set of helpful methods that make a developer's life easier when working with a database. Dapper Addons helps developers to create, update, or delete records without having to worry about opening and closing sql connections, as well as object casting.</Description>
-    <PackageProjectUrl>https://github.com/iamAhsanJoiya/DapperAddons</PackageProjectUrl>
-    <PackageReadmeFile>DapperAddons.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/iamAhsanJoiya/DapperAddons</RepositoryUrl>
-    <PackageTags>Dapper Helpers, Dapper Addons, Dapper Extensions</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-    <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Includes Common methods to perform crud operations</PackageReleaseNotes>
-    <Copyright>Copyright @2022 by Ahsan Joiya</Copyright>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>Ahsan Joiya</Authors>
+		<Description>Dapper Addons is a set of helpful methods that make a developer's life easier when working with a database. Dapper Addons helps developers to create, update, or delete records without having to worry about opening and closing sql connections, as well as object casting.</Description>
+		<PackageProjectUrl>https://github.com/iamAhsanJoiya/DapperAddons</PackageProjectUrl>
+		<PackageReadmeFile>DapperAddons.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/iamAhsanJoiya/DapperAddons</RepositoryUrl>
+		<PackageTags>Dapper Helpers, Dapper Addons, Dapper Extensions</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<RepositoryType>git</RepositoryType>
+		<PackageReleaseNotes>A new Populate Dropdown method has been added</PackageReleaseNotes>
+		<Copyright>Copyright @2022 by Ahsan Joiya</Copyright>
+		<AssemblyVersion>1.0.0</AssemblyVersion>
+		<FileVersion>1.0.0</FileVersion>
+		<Version>1.0.1</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\..\OneDrive\Desktop\DapperAddons.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="C:\Users\iamAh\OneDrive\Desktop\DapperAddons.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Dapper" Version="2.0.123" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+	</ItemGroup>
 </Project>
