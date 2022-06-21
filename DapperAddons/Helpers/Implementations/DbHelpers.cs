@@ -6,13 +6,13 @@ using System.Data.SqlClient;
 
 namespace DapperAddons.Helpers.Implementations;
 /// <summary>
-/// Database helpers to perform CRUD operations in a convenient way
+/// Database helper methods to perform CRUD operations in a convenient way
 /// </summary>
 public class DbHelpers : IDbHelpers
 {
     private readonly IConfiguration _configuration;
     /// <summary>
-    /// Dbhelpers constructor used to inject configuration for SQL connections.
+    /// Dbhelpers constructor used to inject configuration service for SQL connections.
     /// </summary>
     /// <param name="configuration"></param>
     public DbHelpers(IConfiguration configuration)
@@ -25,9 +25,9 @@ public class DbHelpers : IDbHelpers
     // Dapper Query Executer
     // ------------------------ //
 
-    #region Dapper Method to Get Result Set Via Query 
+    #region Dapper Method to Get Records Via Query 
     /// <summary>
-    /// Database helper method to get the list of records using sql query
+    /// Get list of records using sql query
     /// </summary>
     /// <typeparam name="ReturnType"></typeparam>
     /// <param name="sqlQuery"></param>
@@ -44,9 +44,10 @@ public class DbHelpers : IDbHelpers
         }
     }
     #endregion
-    #region Dapper Method to Get Result Set Via Query 
+
+    #region Dapper Method to Get Records Via Query 
     /// <summary>
-    /// Database helper method to get the list of records using sql query
+    /// Get list of records using sql query
     /// </summary>
     /// <typeparam name="ReturnType"></typeparam>
     /// <typeparam name="InputParemeters"></typeparam>
@@ -66,9 +67,9 @@ public class DbHelpers : IDbHelpers
     }
     #endregion
 
-    #region Dapper Method to Get Single Result via Query
+    #region Dapper Method to Get Single Record via Query
     /// <summary>
-    /// Database helper method for retrieving one record from database using sql query
+    /// Retrieve single record from database using sql query
     /// </summary>
     /// <typeparam name="ReturnType"></typeparam>
     /// <param name="sqlQuery"></param>
@@ -86,9 +87,9 @@ public class DbHelpers : IDbHelpers
     }
     #endregion
 
-    #region Dapper Method to Get Single Result via Query
+    #region Dapper Method to Get Single Record via Query
     /// <summary>
-    /// Database helper method for retrieving one record from database using sql query
+    /// Retrieve single record from database using sql query
     /// </summary>
     /// <typeparam name="ReturnType"></typeparam>
     /// <typeparam name="InputParemeters"></typeparam>
@@ -108,9 +109,9 @@ public class DbHelpers : IDbHelpers
     }
     #endregion
 
-    #region Dapper Method to Insert Data via Query
+    #region Dapper Method to Insert Single Record via Query
     /// <summary>
-    /// Database Helper method to insert / save a record in a database using sql query
+    /// Save single record in database using sql query
     /// </summary>
     /// <typeparam name="InputParemeters"></typeparam>
     /// <param name="sqlQuery"></param>
@@ -129,9 +130,30 @@ public class DbHelpers : IDbHelpers
     }
     #endregion
 
-    #region Dapper Method to Update Data via Query
+    #region Dapper Method to Bulk Insert Records via Query
     /// <summary>
-    /// Database Helper method for updating a record in database using sql query
+    /// Save multiple records in database using sql query 
+    /// </summary>
+    /// <typeparam name="InputParemeters"></typeparam>
+    /// <param name="sqlQuery"></param>
+    /// <param name="inputParameters"></param>
+    /// <param name="connectionStringName"></param>
+    /// <returns></returns>
+    public async Task<int> BulkInsertAsync<InputParemeters>(string sqlQuery, IEnumerable<InputParemeters>? inputParameters = default, string connectionStringName = "DefaultConnection")
+    {
+        using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
+        {
+            dbConnection.Open();
+            int result = await dbConnection.ExecuteAsync(sqlQuery, inputParameters);
+            dbConnection.Close();
+            return result;
+        };
+    }
+    #endregion
+
+    #region Dapper Method to Update Single Record via Query
+    /// <summary>
+    /// Update single record in database using sql query
     /// </summary>
     /// <typeparam name="InputParemeters"></typeparam>
     /// <param name="sqlQuery"></param>
@@ -149,17 +171,57 @@ public class DbHelpers : IDbHelpers
         };
     }
     #endregion
-
-    #region Dapper Method to Delete Data via Query
+    #region Dapper Method to Bulk Update Records via Query
     /// <summary>
-    /// Database Helper method for deleting records from database using sql query
+    /// Update multiple records in database using sql query
     /// </summary>
     /// <typeparam name="InputParemeters"></typeparam>
     /// <param name="sqlQuery"></param>
     /// <param name="inputParameters"></param>
     /// <param name="connectionStringName"></param>
     /// <returns></returns>
-    public async Task<int> DeleteAsync<InputParemeters>(string sqlQuery, InputParemeters? inputParameters = default, string connectionStringName = "DefaultConnection")
+    public async Task<int> BulkUpdateAsync<InputParemeters>(string sqlQuery, IEnumerable<InputParemeters>? inputParameters = default, string connectionStringName = "DefaultConnection")
+    {
+        using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
+        {
+            dbConnection.Open();
+            int result = await dbConnection.ExecuteAsync(sqlQuery, inputParameters);
+            dbConnection.Close();
+            return result;
+        };
+    }
+    #endregion
+
+    #region Dapper Method to Delete Single Record via Query
+    /// <summary>
+    /// Delete single record from database using sql query
+    /// </summary>
+    /// <typeparam name="InputParemeters"></typeparam>
+    /// <param name="sqlQuery"></param>
+    /// <param name="inputParameters"></param>
+    /// <param name="connectionStringName"></param>
+    /// <returns></returns>
+    public async Task<int> DeleteOneAsync<InputParemeters>(string sqlQuery, InputParemeters? inputParameters = default, string connectionStringName = "DefaultConnection")
+    {
+        using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
+        {
+            dbConnection.Open();
+            int result = await dbConnection.ExecuteAsync(sqlQuery, inputParameters);
+            dbConnection.Close();
+            return result;
+        };
+    }
+    #endregion
+    #region Dapper Method to Bulk Delete Records via Query
+    /// <summary>
+    /// Delete multiple records from database using sql query
+    /// </summary>
+    /// <typeparam name="InputParemeters"></typeparam>
+    /// <param name="sqlQuery"></param>
+    /// <param name="inputParameters"></param>
+    /// <param name="connectionStringName"></param>
+    /// <returns></returns>
+    public async Task<int> BulkDeleteAsync<InputParemeters>(string sqlQuery, IEnumerable<InputParemeters>? inputParameters = default, string connectionStringName = "DefaultConnection")
     {
         using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
         {
@@ -176,147 +238,209 @@ public class DbHelpers : IDbHelpers
     // Dapper Store Procedures Executers
     // ---------------------------------- //
 
-    #region Dapper Method to Get Result Set via Store Procedure
+    #region Dapper Method to Get Records via Store Procedure
     /// <summary>
-    /// Database helper method to get the list of records using sql store procedure
+    /// Get list of records using sql store procedure
     /// </summary>
     /// <typeparam name="ReturnType"></typeparam>
-    /// <param name="storeProcedure"></param>
+    /// <param name="storeProcedureName"></param>
     /// <param name="connectionStringName"></param>
     /// <returns>List of objects you specified as a return type</returns>
-    public async Task<List<ReturnType>> GetAllByStoreProcedureAsync<ReturnType>(string storeProcedure, string connectionStringName = "DefaultConnection")
+    public async Task<List<ReturnType>> GetAllByStoreProcedureAsync<ReturnType>(string storeProcedureName, string connectionStringName = "DefaultConnection")
     {
         using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
         {
             dbConnection.Open();
-            List<ReturnType> resultSet = (await dbConnection.QueryAsync<ReturnType>(storeProcedure, commandType: CommandType.StoredProcedure)).ToList();
+            List<ReturnType> resultSet = (await dbConnection.QueryAsync<ReturnType>(storeProcedureName, commandType: CommandType.StoredProcedure)).ToList();
             dbConnection.Close();
             return resultSet;
         };
     }
     #endregion
 
-    #region Dapper Method to Get Result Set via Store Procedure
+    #region Dapper Method to Get Records via Store Procedure
     /// <summary>
-    /// Database helper method to get the list of records using sql store procedure
+    /// Get list of records using sql store procedure
     /// </summary>
     /// <typeparam name="ReturnType"></typeparam>
     /// <typeparam name="InputParemeters"></typeparam>
-    /// <param name="storeProcedure"></param>
+    /// <param name="storeProcedureName"></param>
     /// <param name="inputParameters"></param>
     /// <param name="connectionStringName"></param>
     /// <returns>List of objects you specified as a return type</returns>
-    public async Task<List<ReturnType>> GetAllByStoreProcedureAsync<ReturnType, InputParemeters>(string storeProcedure, InputParemeters? inputParameters = default, string connectionStringName = "DefaultConnection")
+    public async Task<List<ReturnType>> GetAllByStoreProcedureAsync<ReturnType, InputParemeters>(string storeProcedureName, InputParemeters? inputParameters = default, string connectionStringName = "DefaultConnection")
     {
         using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
         {
             dbConnection.Open();
-            List<ReturnType> resultSet = (await dbConnection.QueryAsync<ReturnType>(storeProcedure, inputParameters, commandType: CommandType.StoredProcedure)).ToList();
+            List<ReturnType> resultSet = (await dbConnection.QueryAsync<ReturnType>(storeProcedureName, inputParameters, commandType: CommandType.StoredProcedure)).ToList();
             dbConnection.Close();
             return resultSet;
         };
     }
     #endregion
 
-    #region Dapper Method to Get Single Result via Store Procedure
+
+    #region Dapper Method to Get Single Record via Store Procedure
     /// <summary>
-    /// Database helper method for retrieving one record from database using sql store procedure
+    /// Retrievee single record from database using sql store procedure
     /// </summary>
     /// <typeparam name="ReturnType"></typeparam>
-    /// <param name="storeProcedure"></param>
+    /// <param name="storeProcedureName"></param>
     /// <param name="connectionStringName"></param>
     /// <returns></returns>
-    public async Task<ReturnType> GetOneByStoreProcedureAsync<ReturnType>(string storeProcedure, string connectionStringName = "DefaultConnection")
+    public async Task<ReturnType> GetOneByStoreProcedureAsync<ReturnType>(string storeProcedureName, string connectionStringName = "DefaultConnection")
     {
         using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
         {
             dbConnection.Open();
-            ReturnType result = await dbConnection.QueryFirstOrDefaultAsync<ReturnType>(storeProcedure, commandType: CommandType.StoredProcedure);
+            ReturnType result = await dbConnection.QueryFirstOrDefaultAsync<ReturnType>(storeProcedureName, commandType: CommandType.StoredProcedure);
             dbConnection.Close();
             return result;
         };
     }
     #endregion
 
-    #region Dapper Method to Get Single Result via Store Procedure
+    #region Dapper Method to Get Single Record via Store Procedure
     /// <summary>
-    /// Database helper method for retrieving one record from database using sql store procedure
+    /// Retrieve single record from database using sql store procedure
     /// </summary>
     /// <typeparam name="ReturnType"></typeparam>
     /// <typeparam name="InputParemeters"></typeparam>
-    /// <param name="storeProcedure"></param>
+    /// <param name="storeProcedureName"></param>
     /// <param name="inputParameters"></param>
     /// <param name="connectionStringName"></param>
     /// <returns></returns>
-    public async Task<ReturnType> GetOneByStoreProcedureAsync<ReturnType, InputParemeters>(string storeProcedure, InputParemeters? inputParameters = default, string connectionStringName = "DefaultConnection")
+    public async Task<ReturnType> GetOneByStoreProcedureAsync<ReturnType, InputParemeters>(string storeProcedureName, InputParemeters? inputParameters = default, string connectionStringName = "DefaultConnection")
     {
         using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
         {
             dbConnection.Open();
-            ReturnType result = await dbConnection.QueryFirstOrDefaultAsync<ReturnType>(storeProcedure, inputParameters, commandType: CommandType.StoredProcedure);
+            ReturnType result = await dbConnection.QueryFirstOrDefaultAsync<ReturnType>(storeProcedureName, inputParameters, commandType: CommandType.StoredProcedure);
             dbConnection.Close();
             return result;
         };
     }
     #endregion
 
-    #region Dapper Method to Insert Data via Store Procedure
+    #region Dapper Method to Insert Record via Store Procedure
     /// <summary>
-    /// Database Helper method to insert / save a record in a database using sql store procedure
+    /// Save single record in database using sql store procedure
     /// </summary>
     /// <typeparam name="InputParemeters"></typeparam>
-    /// <param name="storeProcedure"></param>
+    /// <param name="storeProcedureName"></param>
     /// <param name="inputParameters"></param>
     /// <param name="connectionStringName"></param>
     /// <returns></returns>
-    public async Task<int> InsertOneByStoreProcedureAsync<InputParemeters>(string storeProcedure, InputParemeters? inputParameters = default, string connectionStringName = "DefaultConnection")
+    public async Task<int> InsertOneByStoreProcedureAsync<InputParemeters>(string storeProcedureName, InputParemeters? inputParameters = default, string connectionStringName = "DefaultConnection")
     {
         using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
         {
             dbConnection.Open();
-            int result = await dbConnection.ExecuteAsync(storeProcedure, inputParameters, commandType: CommandType.StoredProcedure);
+            int result = await dbConnection.ExecuteAsync(storeProcedureName, inputParameters, commandType: CommandType.StoredProcedure);
             dbConnection.Close();
             return result;
         };
     }
     #endregion
 
-    #region Dapper Method to Update Data via Store Procedure
+    #region Dapper Method to Bulk Insert Records via Store Procedure
     /// <summary>
-    /// Database Helper method for updating a record in database using sql store procedure
+    /// Save multiple records in database using sql store procedure
     /// </summary>
     /// <typeparam name="InputParemeters"></typeparam>
-    /// <param name="storeProcedure"></param>
+    /// <param name="storeProcedureName"></param>
     /// <param name="inputParameters"></param>
     /// <param name="connectionStringName"></param>
     /// <returns></returns>
-    public async Task<int> UpdateOneByStoreProcedureAsync<InputParemeters>(string storeProcedure, InputParemeters? inputParameters = default, string connectionStringName = "DefaultConnection")
+    public async Task<int> BulkInsertByStoreProcedureAsync<InputParemeters>(string storeProcedureName, IEnumerable<InputParemeters>? inputParameters = default, string connectionStringName = "DefaultConnection")
     {
         using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
         {
             dbConnection.Open();
-            int result = await dbConnection.ExecuteAsync(storeProcedure, inputParameters, commandType: CommandType.StoredProcedure);
+            int result = await dbConnection.ExecuteAsync(storeProcedureName, inputParameters, commandType: CommandType.StoredProcedure);
+            dbConnection.Close();
+            return result;
+        };
+    }
+    #endregion
+    #region Dapper Method to Update Record via Store Procedure
+    /// <summary>
+    /// Update single record in database using sql store procedure
+    /// </summary>
+    /// <typeparam name="InputParemeters"></typeparam>
+    /// <param name="storeProcedureName"></param>
+    /// <param name="inputParameters"></param>
+    /// <param name="connectionStringName"></param>
+    /// <returns></returns>
+    public async Task<int> UpdateOneByStoreProcedureAsync<InputParemeters>(string storeProcedureName, InputParemeters? inputParameters = default, string connectionStringName = "DefaultConnection")
+    {
+        using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
+        {
+            dbConnection.Open();
+            int result = await dbConnection.ExecuteAsync(storeProcedureName, inputParameters, commandType: CommandType.StoredProcedure);
             dbConnection.Close();
             return result;
         };
     }
     #endregion
 
-    #region Dapper Method to Delete Data via Store Procedure
+    #region Dapper Method to Bulk Update Records via Store Procedure
     /// <summary>
-    /// Database Helper method for deleting records from database using sql store procedure
+    /// Update multiple records in database using sql store procedure
     /// </summary>
     /// <typeparam name="InputParemeters"></typeparam>
-    /// <param name="storeProcedure"></param>
+    /// <param name="storeProcedureName"></param>
     /// <param name="inputParameters"></param>
     /// <param name="connectionStringName"></param>
     /// <returns></returns>
-    public async Task<int> DeleteByStoreProcedureAsync<InputParemeters>(string storeProcedure, InputParemeters? inputParameters = default, string connectionStringName = "DefaultConnection")
+    public async Task<int> BulkUpdateByStoreProcedureAsync<InputParemeters>(string storeProcedureName, IEnumerable<InputParemeters>? inputParameters = default, string connectionStringName = "DefaultConnection")
     {
         using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
         {
             dbConnection.Open();
-            int result = await dbConnection.ExecuteAsync(storeProcedure, inputParameters, commandType: CommandType.StoredProcedure);
+            int result = await dbConnection.ExecuteAsync(storeProcedureName, inputParameters, commandType: CommandType.StoredProcedure);
+            dbConnection.Close();
+            return result;
+        };
+    }
+    #endregion
+
+    #region Dapper Method to Delete Record via Store Procedure
+    /// <summary>
+    /// Delete single record from database using sql store procedure
+    /// </summary>
+    /// <typeparam name="InputParemeters"></typeparam>
+    /// <param name="storeProcedureName"></param>
+    /// <param name="inputParameters"></param>
+    /// <param name="connectionStringName"></param>
+    /// <returns></returns>
+    public async Task<int> DeleteOneByStoreProcedureAsync<InputParemeters>(string storeProcedureName, InputParemeters? inputParameters = default, string connectionStringName = "DefaultConnection")
+    {
+        using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
+        {
+            dbConnection.Open();
+            int result = await dbConnection.ExecuteAsync(storeProcedureName, inputParameters, commandType: CommandType.StoredProcedure);
+            dbConnection.Close();
+            return result;
+        };
+    }
+    #endregion
+    #region Dapper Method to Bulk Delete Records via Store Procedure
+    /// <summary>
+    /// Delete multiple records from database using sql store procedure
+    /// </summary>
+    /// <typeparam name="InputParemeters"></typeparam>
+    /// <param name="storeProcedureName"></param>
+    /// <param name="inputParameters"></param>
+    /// <param name="connectionStringName"></param>
+    /// <returns></returns>
+    public async Task<int> BulkDeleteByStoreProcedureAsync<InputParemeters>(string storeProcedureName, IEnumerable<InputParemeters>? inputParameters = default, string connectionStringName = "DefaultConnection")
+    {
+        using (IDbConnection dbConnection = new SqlConnection(_configuration.GetConnectionString(connectionStringName)))
+        {
+            dbConnection.Open();
+            int result = await dbConnection.ExecuteAsync(storeProcedureName, inputParameters, commandType: CommandType.StoredProcedure);
             dbConnection.Close();
             return result;
         };

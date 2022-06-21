@@ -20,7 +20,7 @@
 		<Copyright>Copyright @2022 by Ahsan Joiya</Copyright>
 		<AssemblyVersion>1.0.0</AssemblyVersion>
 		<FileVersion>1.0.0</FileVersion>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -32,7 +32,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.0.123" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />

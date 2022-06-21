@@ -16,7 +16,6 @@ public static class DapperAddonServices
     public static IServiceCollection AddDapperAddons(this IServiceCollection services)
     {
         services.AddScoped(typeof(IDbHelpers), typeof(DbHelpers));
-        services.AddScoped(typeof(IHTMLHelpers), typeof(HTMLHelpers));
         return services;
     }
 }
